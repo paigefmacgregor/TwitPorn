@@ -29,7 +29,7 @@ try:
         exit()
 
     # a list of usernames to get twitter updates from
-    usernames = ['adriannalunaxxx', 'clubalektrablue', 'alexismonroexxx', 'alexis_texas', 'alliehaze', 'anafoxxx', 'andysandimas', 'anikkaalbrite', 'asaakira', 'bobbistarr', 'thebonnierotten', 'xxxbrendon', 'brooklynleexxx']
+    usernames = ['adriannalunaxxx', 'clubalektrablue', 'alexismonroexxx', 'alexis_texas', 'alliehaze', 'anafoxxx', 'andysandimas', 'anikkaalbrite', 'asaakira', 'bobbistarr', 'thebonnierotten', 'xxxbrendon', 'brooklynleexxx', 'cassandra_nix', 'chanelpreston', 'iluvchristie', 'danecross', 'missdanidaniels', 'dpiercexxx', 'eric_john', 'ericmastersonx', 'erik_everhard', 'evanstonexxx', 'giovannixxxxx', 'gracieglam', 'msindiasummer', 'jackvegasxxx', 'jamesdeen', 'jessieslife', 'itsjessierogers', 'kagneytweets', 'itskarinawhite', 'kayden_kross', 'kaylani_lei', 'keiranlee', 'kendallkarsonxo', 'kristinarosexxx', 'leilani_leeane', 'omgitslexi', 'lexsteele11', 'maddyoreillyxxx', 'themandingoclub', 'manuelferrara', 'marcuslondon', 'melina_mason', 'mickbluexxx', 'mollybennett93', 'mrpetexxx', 'missnatashanice', 'xnicoleanistonx', 'nyomibanxxx', 'penny_pax', 'presleyhartxxx', 'princeyahshua', 'spearstv', 'remymeow', 'richiesbrain', 'imrichiedeville', 'rileyreixx3', 'misssaintxxx', 'sethgamblexxx', 'siripornstar', 'skin_diamond', 'stevenstcroix1', 'stevieshaexxx', 'tashareign', 'itstessalane', 'tommygunnxxx', 'tommypistol', 'trinitystclair', 'xcorvus777']
     # go through each of the names...
     for name in usernames:
         print "GETTING TWEETS FOR", name
@@ -65,12 +65,8 @@ try:
                     'author': {
                         'name': tweet.author.name,
                         'screen_name': tweet.author.screen_name.lower(),
-                        'created_at': tweet.author.created_at,
-                        'verified': tweet.author.verified,
                         'followers_count': tweet.author.followers_count,
                         'friends_count': tweet.author.friends_count,
-                        'statuses_count': tweet.author.statuses_count,
-                        'listed_count': tweet.author.listed_count
                     },
                     'text': tweet_text,
                     'words': re.sub('[^a-zA-Z0-9_\-@# ]', '', tweet_text).lower().split(),
@@ -97,7 +93,7 @@ try:
                 db.tweets.insert(tweet_object)
 
             if not is_done:
-                # wait for 25 seconds to avoid hitting Twitter API rate limit
+                # wait for 30 seconds to avoid hitting Twitter API rate limit
                 print "not done yet... need another page"
                 page = page + 1
                 print db.tweets.find({'author.screen_name': name}).count(), "total", name, "tweets in database"
