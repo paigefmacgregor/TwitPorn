@@ -1,4 +1,5 @@
 .DS_store
 
-git rm --cached .DS_Store
 git rm --cached TwitPorn/.DS_Store
+git rm --cached TwitPorn/helper_decorators.pyc
+git rm --cached TwitPorn/helpers.pyc
