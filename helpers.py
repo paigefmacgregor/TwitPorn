@@ -185,7 +185,10 @@ def all_tweet_data(filename):
         tweet_keys.append(entity_type[0])
     csv_file.writerow([unicode(field).encode('ascii','ignore') for field in tweet_keys])
 
-    for tweet in db.tweets.find().sort('author.screen_name', pymongo.ASCENDING):
+    # inserted code from Dan to create an index in the database
+    db.tweets.ensure_index('author.screen_name')
+    
+    for tweet in db.tweets.find().sort('author.screen_name'):
         # get basic fields
         tweet_fields = _recursive_list(tweet, [], ['words', 'entities'], False)
         # get limited data about entities

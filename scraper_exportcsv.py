@@ -29,7 +29,7 @@ try:
         exit()
 
     # a list of usernames to get twitter updates from
-    usernames = ['xxxbrendon', 'brooklynleexxx', 'cassandra_nix', 'chanelpreston', 'iluvchristie', 'danecross', 'missdanidaniels', 'dpiercexxx', 'eric_john', 'ericmastersonx', 'erik_everhard', 'evanstonexxx', 'glamchowdr', 'msindiasummer', 'jamesdeen', 'jessieslife', 'itsjessierogers', 'kagneytweets', 'itskarinawhite', 'kayden_kross', 'kaylani_lei', 'keiranlee', 'kendallkarsonxo', 'kristinarosexxx', 'leilani_leeane', 'omgitslexi', 'lexsteele11', 'lilylabeau', 'maddyoreillyxxx', 'themandingoclub', 'manuelferrara', 'marcuslondon', 'melina_mason', 'mickbluexxx', 'mollybennett93', 'mrpetexxx', 'missnatashanice', 'xnicoleanistonx', 'nyomibanxxx', 'penny_pax', 'presleyhartxxx', 'princeyahshua', 'spearstv', 'remymeow', 'richiesbrain', 'imrichiedeville', 'rileyreidx3', 'misssaintxxx', 'sethgamblexxx', 'siripornstar', 'skin_diamond', 'stevenstcroix1', 'stevieshaexxx', 'tashareign', 'itstessalane', 'tommygunnxxx', 'tommypistol', 'trinitystclair', 'xcorvus777']
+    usernames = ['adriannalunaxxx']
     # go through each of the names...
     for name in usernames:
         print "GETTING TWEETS FOR", name
@@ -113,9 +113,6 @@ try:
 
 except pymongo.errors.AutoReconnect:
     print "ERROR CONNECTING TO DATABASE! Is mongod running?"
-
-
-
 
 
 import csv, copy
@@ -266,6 +263,8 @@ def total_tweets(begin_date=False, end_date=False, extend_query={}, print_table=
     export_data.append(['TOTAL', db.tweets.find(extend_query).count()])
     return export_data
 
+
+
 @should_return
 @export_csv
 @print_table
@@ -275,7 +274,6 @@ def tweets_per_day(begin_date=False, end_date=False, extend_query={}, print_tabl
         Prints the average number of tweets per day for each screen name in database.
         """
     export_data = [['screen name', 'average # tweets per day']]
-    
     for name in screen_names_in_db():
         query = dict({'author.screen_name': name}.items() + extend_query.items())
         tweets = db.tweets.find(query).sort('created_at', pymongo.ASCENDING)
@@ -287,7 +285,7 @@ def tweets_per_day(begin_date=False, end_date=False, extend_query={}, print_tabl
             export_data.append([name, avg])
         else:
             export_data.append([name, 0])
-    
+        
     return export_data
 
 @should_return
@@ -394,16 +392,17 @@ def tweets_text(begin_date=False, end_date=False, extend_query={}, print_table=T
             export_data.append([name, tweet['created_at'], tweet_text])
     return export_data
 
+
 def all_tweet_data(filename):
     """
         Exports a CSV file containing nearly all known data about all tweets in the database.
-        
         Leaves out a few details about entities.
         """
     # make a new csv file with name of filename
     new_file = open(filename+'.csv','wb')
     # open the file with csv writer
     csv_file = csv.writer(new_file)
+    
     
     # first row of csv is a list of the keys for all the data columns
     tweet_keys = _recursive_list(db.tweets.find_one(), [], ['words', 'entities'], True)
@@ -412,6 +411,9 @@ def all_tweet_data(filename):
         tweet_keys.append(entity_type[0] + ' count')
         tweet_keys.append(entity_type[0])
     csv_file.writerow([unicode(field).encode('ascii','ignore') for field in tweet_keys])
+    
+    # added code from Dan to avoid .csv file export error
+    db.tweets.ensure_index({'author.screen_name': pymongo.ASCENDING})
     
     for tweet in db.tweets.find().sort('author.screen_name', pymongo.ASCENDING):
         # get basic fields
