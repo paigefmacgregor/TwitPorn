@@ -11,6 +11,8 @@ def ascii_encode(text):
     text.encode('ascii','ignore')
     return text
 
+#  replace(u'\ufffd',u'e')
+
 try:
     # connect to Mongo database
     connection = pymongo.Connection()
@@ -27,9 +29,14 @@ try:
     confirm = raw_input("that's " + str((datetime.now() - start_date).days) + " days of tweets, are you sure? (y/n): ")
     if confirm != 'y':
         exit()
-
+    
+    #an attempt to deal with the Tweepy Error problem (rate limit exceeded error received when the rate limit hasn't actually been exceeded, perhaps due to shared IP addresses) by authenticating:
+    auth = tweepy.BasicAuthHandler('paigefmacgregor', 'Parker_13')
+    
+    api = tweepy.API(auth)
+    # , 'danadearmond', 'terapatrickxxx', 'realronjeremy', 'sashagrey', 'sunnyleone', 'stoya', 'misstoriblack', 'enterbelladonna', 'therealgianna', 'jennahaze', 'thekatiemorgan', 'breeolson', 'realpeternorth'    
     # a list of usernames to get twitter updates from
-    usernames = ['adriannalunaxxx']
+    usernames = ['jennajameson']
     # go through each of the names...
     for name in usernames:
         print "GETTING TWEETS FOR", name
